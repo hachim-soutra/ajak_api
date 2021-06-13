@@ -39,7 +39,7 @@ class Colis extends Model
     }
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(User::class,"client_id")->where("userable_type",Client::class);
     }
     public function user()
     {

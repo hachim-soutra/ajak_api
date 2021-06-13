@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\Api\BaseController;
 use App\Http\Resources\Users\LivreurCollection;
 use App\Http\Resources\Users\LivreurResource;
 use App\Models\Livreur;

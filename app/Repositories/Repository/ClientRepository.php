@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Repository;
 
+use App\Http\Resources\ClientCollection;
 use App\Models\Client;
+use App\Models\User;
 use App\Repositories\RepositoryInterface;
 
 class ClientRepository implements RepositoryInterface
@@ -24,11 +26,18 @@ class ClientRepository implements RepositoryInterface
     // Get all instances of client
     public function get_by_agency($id)
     {
-        return $this->client::where('agence_id', $id)->paginate(15);
+        if(auth()->user()->userable->role_id == 1){
+            return new ClientCollection($this->client::whereHas('user')->get());
+        }
+        return new ClientCollection($this->client::whereHas('user', function($q) use ($id){
+            $q->where('agence_id', $id);
+        })->get());
     }
     public function get_by_agency_list($id)
     {
-        return $this->client::where('agence_id', $id)->get();
+        return $this->client::whereHas('user', function($q) use ($id){
+            $q->where('agence_id', $id);
+        })->get();
     }
 
     // create a new record in the database
@@ -41,6 +50,11 @@ class ClientRepository implements RepositoryInterface
     public function update(array $data, $id)
     {
         $record = $this->client->find($id);
+        User::find($record->user->id)->update([
+            'name'  => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+        ]);
         return $record->update($data);
     }
 

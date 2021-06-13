@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -68,7 +69,12 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Login or mot de pass incorrect !!'
+            ], 401);
+
+        if (Auth::user()->userable_type != Admin::class)
+            return response()->json([
+                'message' => `Unauthorized`. ${Auth::user()->userable_type}
             ], 401);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -80,6 +86,7 @@ class AuthController extends Controller
             'access_token'  => $tokenResult->accessToken,
             'user'          => auth()->user(),
             'space'         => 'agency',
+            'message'       => 'login with success',
             'token_type'    => 'Bearer',
             'expires_at'    => Carbon::parse(
                 $tokenResult->token->expires_at

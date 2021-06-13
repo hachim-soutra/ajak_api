@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Client;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\Users\ColisCollection;
+use App\Http\Resources\Users\ColisResource;
 use App\Models\Colis;
 use Illuminate\Http\Request;
 use App\Repositories\Repository\ColisRepository;
@@ -22,7 +24,33 @@ class ColisController extends BaseController
      */
     public function index()
     {
-        $data = $this->colis->get_by_client(auth()->user()->id);
+        $data = new ColisCollection($this->colis->get_by_client(auth()->user()->id));
+        return $this->sendResponse($data, 'colis list');
+    }
+    public function stock()
+    {
+        $colis = $this->colis->get_by_client(auth()->user()->id);
+        $status_items = [
+            "en attente",
+            "ramasser",
+            "expédié",
+            "pas de reponse",
+            "reporter",
+            "annuler",
+            "livré",
+            "return",
+        ];
+        $data = [];
+        foreach ($status_items as $status) {
+            $x = collect([
+                'all'   => $colis->count(),
+                'value' => $colis->count()>0 ? $colis->where("status",$status)->count()*100/$colis->count(): 0,
+                'count' => $colis->where("status",$status)->count(),
+                'title' => $status,
+            ]);
+            array_push($data, $x);
+        }
+
         return $this->sendResponse($data, 'colis list');
     }
 
@@ -69,9 +97,10 @@ class ColisController extends BaseController
      * @param  \App\Models\colis  $colis
      * @return \Illuminate\Http\Response
      */
-    public function show(colis $colis)
+    public function show($id)
     {
-        //
+        $ReturnColis = new ColisResource($this->colis->show($id));
+        return $this->sendResponse($ReturnColis, 'colis info');
     }
 
     /**

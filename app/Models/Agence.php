@@ -28,10 +28,10 @@ class Agence extends Model
     }
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class)->where("userable_type",Admin::class);
     }
     public function clients()
     {
-        return $this->hasMany(Client::class);
+        return $this->hasMany(User::class)->where("userable_type",Client::class);
     }
 }

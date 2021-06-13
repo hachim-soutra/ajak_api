@@ -25,11 +25,11 @@ class ReturnColisRepository implements RepositoryInterface
     // Get all instances of colis
     public function get_by_agency($id)
     {
-        return $this->colis::where('agence_id', $id)->paginate(15);
+        return $this->colis::where('agence_id', $id)->get();
     }
     public function get_by_client($id)
     {
-        return $this->colis::where('client_id', $id)->paginate(15);
+        return $this->colis::where('client_id', $id)->get();
     }
 
     // create a new record in the database

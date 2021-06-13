@@ -17,37 +17,19 @@ class Client extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'phone', 'agence_id'
+        'status',
+    ];
+    protected $appends = [
+        'name'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    public function agence()
+    public function user()
     {
-        return $this->belongsTo(Agence::class);
+        return $this->morphOne(User::class, 'userable');
     }
-    public function colis()
+    public function getNameAttribute($value)
     {
-        return $this->hasMany(Colis::class);
+        return $this->user ? $this->user->name: "deleted";
     }
+
 }

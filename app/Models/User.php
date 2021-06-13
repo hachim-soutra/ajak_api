@@ -23,8 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'userable_id',
+        'userable_type',
         'agence_id',
-        'role_id',
     ];
 
     /**
@@ -46,20 +47,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function userable()
+    {
+        return $this->morphTo();
+    }
     public function agence()
     {
         return $this->belongsTo(Agence::class);
     }
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-    public function colis()
-    {
-        return $this->hasMany(Colis::class);
-    }
-    public function collaborators()
-    {
-        return User::where('role_id', 1)->get();
-    }
+
 }

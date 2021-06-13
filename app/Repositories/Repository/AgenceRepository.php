@@ -26,7 +26,7 @@ class AgenceRepository implements RepositoryInterface
     // Get all instances of Agence
     public function get_by_agency($id)
     {
-        return $this->Agence::where('agence_id', $id)->paginate(15);
+        return $this->Agence::where('agence_id', $id)->get();
     }
     public function get_by_agency_list($id)
     {

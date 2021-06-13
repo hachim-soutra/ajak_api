@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +16,13 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
+
         $credentials = request(['email', 'password']);
-        if (!auth()->guard('clients')->attempt($credentials))
+        if (!Auth::attempt($credentials) && Auth::user()->userable != Client::class)
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);
-        $user = auth('clients')->user();
+        $user = auth()->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         if ($request->remember_me)
@@ -30,6 +32,7 @@ class AuthController extends Controller
             'access_token'  => $tokenResult->accessToken,
             'user'          => auth()->user(),
             'space'         => 'agency',
+            'message'       => 'login with success',
             'token_type'    => 'Bearer',
             'expires_at'    => Carbon::parse(
                 $tokenResult->token->expires_at

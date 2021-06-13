@@ -24,7 +24,7 @@ class LivreurRepository implements RepositoryInterface
     // Get all instances of Livreur
     public function get_by_agency($id)
     {
-        return $this->Livreur::where('agence_id', $id)->paginate(15);
+        return $this->Livreur::where('agence_id', $id)->get();
     }
     public function get_by_agency_list($id)
     {

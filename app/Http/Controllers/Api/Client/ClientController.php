@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\Client;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\Api\BaseController;
 use App\Models\Client;
 use App\Repositories\Repository\ClientRepository;
 use Illuminate\Http\Request;

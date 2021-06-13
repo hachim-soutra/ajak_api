@@ -27,7 +27,7 @@ class CreateColisTable extends Migration
             $table->timestamp('date_arrive')->nullable();
             $table->string('name');
             $table->string('token');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('adresse');
             $table->double('montant')->nullable();
             $table->integer('livreur_id')->nullable();

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Client;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\RammasageCollection;
+use App\Http\Resources\RammasageResource;
 use App\Models\Rammasage;
 use App\Repositories\Repository\RammasageRepository;
 use Illuminate\Http\Request;
@@ -35,7 +37,7 @@ class RammasageController extends BaseController
     public function index()
     {
         $Rammasages = $this->Rammasage->get_by_client(auth()->user()->id);
-        return $this->sendResponse($Rammasages, 'Rammasage list');
+        return $this->sendResponse(new RammasageCollection($Rammasages), 'Rammasage list');
     }
 
     /**
@@ -72,9 +74,10 @@ class RammasageController extends BaseController
      * @param  \App\Models\Rammasage  $Rammasage
      * @return \Illuminate\Http\Response
      */
-    public function show(Rammasage $Rammasage)
+    public function show($id)
     {
-        //
+        $Rammasage = new RammasageResource($this->Rammasage->show($id));
+        return $this->sendResponse($Rammasage, 'Rammasage info');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\Agence;
 use App\Models\City;
 use App\Models\User;
@@ -16,8 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->create();
+        Admin::create([
+            'role_id' => 1,
+        ]);
+        User::factory(5)->create();
         Agence::factory(10)->create();
-        City::factory(10)->create();
     }
 }

@@ -24,11 +24,13 @@ class RammasageRepository implements RepositoryInterface
     // Get all instances of Rammasage
     public function get_by_agency($id)
     {
-        return $this->Rammasage::where('agence_id', $id)->with('colis')->with('user')->paginate(15);
+        return $this->Rammasage::where('agence_id', $id)->with('colis')->with('user')->get();
     }
     public function get_by_client($id)
     {
-        return $this->Rammasage::where('client_id', $id)->paginate(15);
+        return $this->Rammasage::whereHas('colis', function ($colis) use ($id){
+            $colis->where('client_id', $id);
+        })->get();
     }
 
     // create a new record in the database

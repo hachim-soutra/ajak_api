@@ -16,7 +16,7 @@ class EquipeController extends Controller
      */
     public function index()
     {
-        $users  = User::where('agence_id', auth()->user()->agence_id)->paginate(15);
+        $users  = User::where('agence_id', auth()->user()->agence_id)->get();
         $res['data'] = $users;
         $res['msg']  = "success";
         return response($res, 200);

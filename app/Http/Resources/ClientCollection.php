@@ -14,6 +14,6 @@ class ClientCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return ClientResource::collection($this->collection);
     }
 }

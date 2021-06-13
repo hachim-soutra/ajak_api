@@ -17,7 +17,7 @@ class ReturnColisController extends Controller
     {
         $data = ReturnColis::whereHas('colis', function ($colis) {
             $colis->user_id == auth()->user()->id;
-        })->paginate(15);
+        })->get();
         $res['data'] = $data;
         $res['msg']  = "success";
         return response($res, 200);

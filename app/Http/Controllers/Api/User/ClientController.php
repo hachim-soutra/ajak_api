@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\Api\BaseController;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
+use App\Models\User;
 use App\Repositories\Repository\ClientRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +59,15 @@ class ClientController extends BaseController
             "password"  => Hash::make($request->password)
         ]);
         $clients = $this->client->create($request->all());
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'agence_id' => auth()->user()->agence_id,
+            'userable_id' => $clients->id,
+            'userable_type' => Client::class,
+        ]);
         return $this->sendResponse($clients, 'create client');
     }
 
@@ -93,6 +103,7 @@ class ClientController extends BaseController
      */
     public function update(Request $request, $client)
     {
+
         $request->merge([
             "agence_id" => auth()->user()->agence_id,
             "password"  => Hash::make($request->password)
@@ -109,7 +120,10 @@ class ClientController extends BaseController
      */
     public function destroy($client)
     {
-        $clients = $this->client->delete($client);
-        return $this->sendResponse($clients, 'delete client');
+        $user = Client::find($client);
+        $user->user->delete();
+        $user->delete();
+        $res['msg']  = "success";
+        return response($res, 200);
     }
 }

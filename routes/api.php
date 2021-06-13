@@ -41,7 +41,8 @@ Route::namespace('App\Http\Controllers\Api\User')->prefix('auth')->name('auth.')
 });
 Route::namespace('App\Http\Controllers\Api\Client')->prefix('client/auth')->name('client.auth.')->group(function () {
     Route::post('login', 'AuthController@login');
-    Route::middleware(['auth:clients_api'])->group(function () {
+    Route::middleware(['auth:api'])->group(function () {
+        Route::get('stock', 'ColisController@stock');
         // Route::resource('user', 'UserController');
         Route::resource('equipe', 'EquipeController');
         Route::resource('client', 'ClientController');

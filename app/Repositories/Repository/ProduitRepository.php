@@ -25,11 +25,11 @@ class ProduitRepository implements RepositoryInterface, RepositoryInterface2
     // Get all instances of Produit
     public function get_by_agency($id)
     {
-        return $this->Produit::where('agence_id', $id)->paginate(15);
+        return $this->Produit::where('agence_id', $id)->get();
     }
     public function get_by_client($id)
     {
-        return $this->Produit::where('client_id', $id)->paginate(15);
+        return $this->Produit::where('client_id', $id)->get();
     }
 
     // create a new record in the database

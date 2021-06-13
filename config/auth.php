@@ -40,12 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
         'api' => [
             'driver' => 'passport',
             'provider' => 'users'
         ],
-        'clients' => [
+        'client' => [
             'driver' => 'session',
             'provider' => 'clients'
         ],
@@ -106,11 +105,6 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
-
-        ],
-        'clients' => [
-            'provider' => 'clients',
             'table' => 'password_resets',
 
         ],

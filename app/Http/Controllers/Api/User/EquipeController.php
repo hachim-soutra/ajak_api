@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\Api\BaseController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AdminCollection;
+use App\Http\Resources\AdminResource;
+use App\Http\Resources\UserCollection;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
+use App\Models\Admin;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,8 +27,8 @@ class EquipeController extends BaseController
 
     public function index()
     {
-        $users  = User::where('agence_id', auth()->user()->agence_id)->with("role")->paginate(15);
-        $res['data'] = $users;
+        $users  = User::where("userable_type",Admin::class)->where('agence_id', auth()->user()->agence_id)->get();
+        $res['data'] = new AdminCollection($users);
         $res['msg']  = "success";
         return response($res, 200);
     }
@@ -46,14 +51,19 @@ class EquipeController extends BaseController
      */
     public function store(Request $request)
     {
+        $admin = Admin::create([
+            'role_id' => $request->role_id,
+        ]);
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'role_id' => $request->role_id,
-            'password' => encrypt($request->password),
-            'agence_id' => auth()->user()->agence_id
+            'password' => Hash::make($request->password),
+            'agence_id' => auth()->user()->agence_id,
+            'userable_id' => $admin->id,
+            'userable_type' => Admin::class,
         ]);
+
         $res['msg']  = "success";
         return response($res, 200);
     }
@@ -66,27 +76,15 @@ class EquipeController extends BaseController
      */
     public function show($id)
     {
-        $user = new UserResource(User::find($id));
+        $user = new AdminResource(User::find($id));
         return $this->sendResponse($user, 'user info');
-
     }
     public function getProfil()
     {
-        $user         = auth()->user();
+        $user         = auth()->user()->userable;
         $res['msg']   = "success";
         $res['data']  = new UserResource($user);
         return response($res, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
     }
 
     /**
@@ -102,6 +100,8 @@ class EquipeController extends BaseController
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+        ]);
+        User::find($user)->userable->update([
             'role_id' => $request->role_id,
         ]);
         $res['msg']  = "success";
@@ -117,6 +117,7 @@ class EquipeController extends BaseController
     public function destroy($user)
     {
         $user = User::find($user);
+        $user->userable->delete();
         $user->delete();
         $res['msg']  = "success";
         return response($res, 200);

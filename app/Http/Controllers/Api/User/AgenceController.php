@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\API\BaseController;
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Agence;
 use App\Repositories\Repository\AgenceRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class AgenceController extends BaseController
+class AgenceController extends Controller
 {
 
     protected $Agence = '';
@@ -32,7 +33,12 @@ class AgenceController extends BaseController
     public function list()
     {
         $Agences = $this->Agence->get_by_agency_list(auth()->user()->agence_id);
-        return $this->sendResponse($Agences, 'Agence list');
+        $response = [
+            'success' => true,
+            'data'    => $Agences,
+            'message' => "Agence list",
+        ];
+        return response()->json($response, 200);
     }
     /**
      * Show the form for creating a new resource.
@@ -57,7 +63,13 @@ class AgenceController extends BaseController
         //     "password"  => Hash::make($request->password)
         // ]);
         $Agences = $this->Agence->create($request->all());
-        return $this->sendResponse($Agences, 'create Agence');
+        // return $this->sendResponse($Agences, 'create Agence');
+        $response = [
+            'success' => true,
+            'data'    => $Agences,
+            'message' => "create Agence",
+        ];
+        return response()->json($response, 200);
     }
 
     /**
@@ -69,7 +81,13 @@ class AgenceController extends BaseController
     public function show($Agence)
     {
         $Agence = $this->Agence->show($Agence);
-        return $this->sendResponse($Agence, 'Agence info');
+        // return $this->sendResponse($Agence, 'Agence info');
+        $response = [
+            'success' => true,
+            'data'    => $Agence,
+            'message' => "Agence info",
+        ];
+        return response()->json($response, 200);
     }
 
     /**
@@ -97,7 +115,12 @@ class AgenceController extends BaseController
             "password"  => Hash::make($request->password)
         ]);
         $Agences = $this->Agence->update($request->all(), $Agence);
-        return $this->sendResponse($Agences, 'upadet Agence');
+        $response = [
+            'success' => true,
+            'data'    => $Agences,
+            'message' => "Agence update",
+        ];
+        return response()->json($response, 200);
     }
 
     /**
@@ -109,6 +132,11 @@ class AgenceController extends BaseController
     public function destroy($Agence)
     {
         $Agences = $this->Agence->delete($Agence);
-        return $this->sendResponse($Agences, 'delete Agence');
+        $response = [
+            'success' => true,
+            'data'    => $Agences,
+            'message' => "delete Agence",
+        ];
+        return response()->json($response, 200);
     }
 }
