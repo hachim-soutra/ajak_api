@@ -18,7 +18,7 @@ class AuthController extends Controller
         ]);
 
         $credentials = request(['email', 'password']);
-        if (!Auth::attempt($credentials) && Auth::user()->userable != Client::class)
+        if (!Auth::attempt($credentials) && Auth::user()->userable_type != Client::class)
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);

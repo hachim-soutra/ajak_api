@@ -9,14 +9,13 @@ use App\Repositories\Repository\AgenceRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class AgenceController extends Controller
+class AgenceController extends BaseController
 {
 
     protected $Agence = '';
 
     public function __construct(Agence $Agence)
     {
-        // $this->middleware('auth:api');
         $this->Agence = new AgenceRepository($Agence);
     }
 
@@ -63,13 +62,7 @@ class AgenceController extends Controller
         //     "password"  => Hash::make($request->password)
         // ]);
         $Agences = $this->Agence->create($request->all());
-        // return $this->sendResponse($Agences, 'create Agence');
-        $response = [
-            'success' => true,
-            'data'    => $Agences,
-            'message' => "create Agence",
-        ];
-        return response()->json($response, 200);
+        return $this->sendResponse($Agences, 'create Agence');
     }
 
     /**
@@ -81,13 +74,7 @@ class AgenceController extends Controller
     public function show($Agence)
     {
         $Agence = $this->Agence->show($Agence);
-        // return $this->sendResponse($Agence, 'Agence info');
-        $response = [
-            'success' => true,
-            'data'    => $Agence,
-            'message' => "Agence info",
-        ];
-        return response()->json($response, 200);
+        return $this->sendResponse($Agence, 'Agence info');
     }
 
     /**
