@@ -74,7 +74,7 @@ class AuthController extends Controller
 
         if (Auth::user()->userable_type != Admin::class)
             return response()->json([
-                'message' => `Unauthorized`. ${Auth::user()->userable_type}
+                'message' => `Unauthorized`
             ], 401);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
