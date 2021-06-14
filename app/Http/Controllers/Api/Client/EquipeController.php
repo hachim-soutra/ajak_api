@@ -44,7 +44,7 @@ class EquipeController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
             'agence_id' => auth()->user()->agence_id
         ]);
         $res['msg']  = "success";
@@ -86,7 +86,7 @@ class EquipeController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            // 'password' => Hash::make($request->password),
+            // 'password' => bcrypt($request->password),
         ]);
         $res['msg']  = "success";
         return response($res, 200);

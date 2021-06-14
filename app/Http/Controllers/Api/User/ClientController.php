@@ -56,14 +56,14 @@ class ClientController extends BaseController
     {
         $request->merge([
             "agence_id" => auth()->user()->agence_id,
-            "password"  => Hash::make($request->password)
+            "password"  => bcrypt($request->password)
         ]);
         $clients = $this->client->create($request->all());
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
             'agence_id' => auth()->user()->agence_id,
             'userable_id' => $clients->id,
             'userable_type' => Client::class,
@@ -106,7 +106,7 @@ class ClientController extends BaseController
 
         $request->merge([
             "agence_id" => auth()->user()->agence_id,
-            "password"  => Hash::make($request->password)
+            "password"  => bcrypt($request->password)
         ]);
         $clients = $this->client->update($request->all(), $client);
         return $this->sendResponse($clients, 'upadet client');

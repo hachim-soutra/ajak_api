@@ -58,7 +58,7 @@ class EquipeController extends BaseController
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
             'agence_id' => auth()->user()->agence_id,
             'userable_id' => $admin->id,
             'userable_type' => Admin::class,

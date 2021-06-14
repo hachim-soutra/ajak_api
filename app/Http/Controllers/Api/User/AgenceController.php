@@ -59,7 +59,7 @@ class AgenceController extends BaseController
     {
         // $request->merge([
         //     "agence_id" => auth()->user()->agence_id,
-        //     "password"  => Hash::make($request->password)
+        //     "password"  => bcrypt($request->password)
         // ]);
         $Agences = $this->Agence->create($request->all());
         return $this->sendResponse($Agences, 'create Agence');
@@ -99,7 +99,7 @@ class AgenceController extends BaseController
     {
         $request->merge([
             "agence_id" => auth()->user()->agence_id,
-            "password"  => Hash::make($request->password)
+            "password"  => bcrypt($request->password)
         ]);
         $Agences = $this->Agence->update($request->all(), $Agence);
         $response = [
